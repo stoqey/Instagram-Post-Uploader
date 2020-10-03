@@ -37,7 +37,7 @@ for j_data in json_data:
         width, height = img.size
         # If image width is greater than 1080, just upload it
         if(width > 1080): 
-          img = resizeimage.resize_crop(img, [1080, 1080])
+          img = resizeimage.resize_crop(img, [width, width])
           img.save(filename, img.format)
           fd_img.close()
         #If image width is not equal to height crop image to match width x width(as height)
