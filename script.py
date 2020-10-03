@@ -4,6 +4,7 @@ import requests
 from PIL import Image
 from instabot import Bot
 from resizeimage import resizeimage
+import random
 
 import config
 
@@ -27,14 +28,17 @@ for j_data in json_data:
         print("Caption:", caption)
         print(image_path)
         response = requests.get(image_path)
-        file = open("1.jpg", "wb")
+        filename = str(random.randint(0,10000)) + '.jpg'
+        file = open(filename, "wb")
         file.write(response.content)
         file.close()
-        fd_img = open('1.jpg', 'rb')
+        fd_img = open(filename, 'rb')
         img = Image.open(fd_img)
-        img = resizeimage.resize_crop(img, [1080, 1080])
-        img.save('1.jpg', img.format)
-        fd_img.close()
-        bot.upload_photo('1.jpg', caption=caption)
-        os.remove("1.jpg.REMOVE_ME")
+        width, height = img.size
+        if(width > 1080): 
+          img = resizeimage.resize_crop(img, [1080, 1080])
+          img.save(filename, img.format)
+          fd_img.close()
+        bot.upload_photo(filename, caption=caption)
+        os.remove(filename+".REMOVE_ME")
     print()
