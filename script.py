@@ -35,10 +35,17 @@ for j_data in json_data:
         fd_img = open(filename, 'rb')
         img = Image.open(fd_img)
         width, height = img.size
+        # If image width is greater than 1080, just upload it
         if(width > 1080): 
           img = resizeimage.resize_crop(img, [1080, 1080])
           img.save(filename, img.format)
           fd_img.close()
+        #If image width is not equal to height crop image to match width x width(as height)
+        if(width != height):
+            size = width, width
+            img = resizeimage.resize_crop(img, size)
+            img.save(filename, img.format)
+            fd_img.close()
         bot.upload_photo(filename, caption=caption)
         os.remove(filename+".REMOVE_ME")
     print()
